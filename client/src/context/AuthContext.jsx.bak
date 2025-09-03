@@ -1,0 +1,403 @@
+import { createContext, useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import axios from 'axios';
+import { useNavigate, useLocation } from 'react-router-dom';
+import API_BASE_URL from '../config';
+
+const AuthContext = createContext(null);
+
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isInitialMount = useRef(true);
+
+  // Set axios defaults for credentials
+  axios.defaults.withCredentials = true;
+
+  // Clear authentication data
+  const clearAuthData = useCallback(() => {
+    // Clear tokens
+    document.cookie = 'token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    localStorage.removeItem('token');
+    
+    // Clear any pending redirects
+    sessionStorage.removeItem('pendingPath');
+    sessionStorage.removeItem('pendingState');
+    
+    // Reset user state
+    setUser(null);
+    setError(null);
+    
+    // Don't redirect if we're already on a public page
+    const publicPaths = ['/login', '/register', '/'];
+    if (!publicPaths.includes(location.pathname)) {
+      navigate('/login', {
+        state: {
+          from: location.pathname,
+          message: 'Please log in to continue.'
+        }
+      });
+    }
+  }, [navigate, location.pathname]);
+
+  // Fetch user data
+  const fetchUserData = useCallback(async () => {
+    // Skip if we already have user data
+    if (user) return;
+    
+    setLoading(true);
+    
+    try {
+      // Check if we have a token in cookies or local storage
+      const token = document.cookie.split('; ').find(row => row.startsWith('token='))?.split('=')[1] || 
+                   localStorage.getItem('token');
+      
+      if (!token) {
+        setUser(null);
+        setLoading(false);
+        return;
+      }
+      
+      const response = await axios.get(`${API_BASE_URL}/api/user/me`, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        timeout: 10000 // 10 second timeout
+      });
+
+      // If we get here, the request was successful
+      setUser(response.data);
+      setError(null);
+    } catch (err) {
+      console.error('Error fetching user data:', err);
+      if (err.response?.status === 401) {
+        // Token is invalid or expired, clear auth data
+        clearAuthData();
+      } else {
+        setError('Failed to fetch user data. Please try again later.');
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, [user, clearAuthData]);
+
+  // Fetch user data on initial mount
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      fetchUserData();
+    }
+  }, [fetchUserData]);
+
+  // Login function
+  const login = useCallback(async (email, password) => {
+    setLoading(true);
+    try {
+      const response = await axios.post(`${API_BASE_URL}/api/user/login`, {
+        email,
+        password
+      }, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      const { token, user: userData } = response.data;
+      
+      // Store token in both cookie and localStorage for redundancy
+      document.cookie = `token=${token}; Path=/; Secure; SameSite=Strict`;
+      localStorage.setItem('token', token);
+      
+      // Update user state
+      setUser(userData);
+      setError(null);
+      
+      // Redirect to previous page or home
+      const from = location.state?.from || '/';
+      navigate(from);
+      
+      return { success: true };
+    } catch (err) {
+      console.error('Login error:', err);
+      const errorMessage = err.response?.data?.message || 'Login failed. Please try again.';
+      setError(errorMessage);
+      return { success: false, message: errorMessage };
+    } finally {
+      setLoading(false);
+    }
+  }, [navigate, location.state]);
+
+  // Logout function
+  const logout = useCallback(() => {
+    clearAuthData();
+    navigate('/login');
+  }, [clearAuthData, navigate]);
+
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    verifySession();
+    
+    // Cleanup function to reset the auth check flag if component unmounts
+    return () => {
+      hasCheckedAuth.current = false;
+    };
+  }, [navigate, loading, clearAuthData]);
+
+  // Require authentication for protected routes
+  const requireAuth = (path, state = {}) => {
+    if (!user) {
+      // Store the current path for redirection after login
+      sessionStorage.setItem('pendingPath', path);
+      if (state) {
+        sessionStorage.setItem('pendingState', JSON.stringify(state));
+      }
+      navigate('/login');
+      return false;
+    }
+    return true;
+  };
+
+  // Login function
+  const login = async (email, password) => {
+    try {
+      // Validate input
+      if (!email || !password) {
+        setError('Please enter both email and password');
+        return { success: false, error: 'Please enter both email and password' };
+      }
+
+      const response = await axios.post(
+        `${API_BASE_URL}/api/user/login`,
+        { email, password },
+        { 
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          validateStatus: (status) => status < 500 // Don't throw for 4xx errors
+        }
+      );
+
+      if (response.status === 200 && response.data.success) {
+        const { user, token } = response.data;
+        
+        // Store the token in both cookie and localStorage for redundancy
+        document.cookie = `token=${token}; Path=/; Secure; SameSite=Strict`;
+        localStorage.setItem('token', token);
+        
+        // Update user state
+        setUser(user);
+        setError(null);
+        
+        // Reset the auth check flag to allow re-checking
+        hasCheckedAuth.current = false;
+        
+        // Redirect to intended path or home
+        const from = location.state?.from?.pathname || '/';
+        return { success: true, redirectPath: from };
+      } else if (response.status === 401) {
+        // Handle 401 Unauthorized
+        const errorMsg = response.data?.message || 'Invalid email or password';
+        setError(errorMsg);
+        return { success: false, error: errorMsg };
+      } else {
+        // Handle other error responses
+        const errorMsg = response.data?.message || 'Login failed. Please try again.';
+        setError(errorMsg);
+        return { success: false, error: errorMsg };
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      const errorMsg = error.response?.data?.message || 'An error occurred during login. Please try again.';
+      setError(errorMsg);
+      return { success: false, error: errorMsg };
+    }
+  };
+
+  // Register function
+  const register = async (userData) => {
+    try {
+      // Validate input
+      if (!userData.name || !userData.email || !userData.password) {
+        const errorMsg = 'Please fill in all required fields';
+        setError(errorMsg);
+        return { success: false, error: errorMsg };
+      }
+
+      // Email format validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(userData.email)) {
+        const errorMsg = 'Please enter a valid email address';
+        setError(errorMsg);
+        return { success: false, error: errorMsg };
+      }
+
+      // Password strength validation
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+      if (!passwordRegex.test(userData.password)) {
+        const errorMsg = 'Password must be at least 8 characters long and include uppercase, lowercase letters, and numbers';
+        setError(errorMsg);
+        return { success: false, error: errorMsg };
+      }
+
+      const response = await axios.post(
+        `${API_BASE_URL}/api/user/register`,
+        userData,
+        { 
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          validateStatus: (status) => status < 500 // Don't throw for 4xx errors
+        }
+      );
+
+      if (response.status === 201 && response.data.success) {
+        // Auto-login after successful registration
+        const loginResponse = await axios.post(
+          `${API_BASE_URL}/api/user/login`,
+          { email: userData.email, password: userData.password },
+          { 
+            withCredentials: true,
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            }
+          }
+        );
+
+        if (loginResponse.status === 200 && loginResponse.data.success) {
+          const { user, token } = loginResponse.data;
+          
+          // Store the token in both cookie and localStorage for redundancy
+          document.cookie = `token=${token}; Path=/; Secure; SameSite=Strict`;
+          localStorage.setItem('token', token);
+          
+          // Update user state
+          setUser(user);
+          setError(null);
+          
+          // Reset the auth check flag to allow re-checking
+          hasCheckedAuth.current = false;
+          
+          // Redirect to intended path or home
+          const from = location.state?.from?.pathname || '/';
+          return { success: true, redirectPath: from };
+        } else {
+          // If auto-login fails, redirect to login page
+          const errorMsg = 'Registration successful! Please log in with your credentials.';
+          setError(errorMsg);
+          return { success: false, error: errorMsg, requiresLogin: true };
+        }
+      } else if (response.status === 400) {
+        // Handle validation errors
+        let errorMsg = 'Registration failed. Please check your input.';
+        
+        if (response.data?.errors) {
+          // Format validation errors into a readable message
+          errorMsg = response.data.errors.map(e => e.msg).join('. ');
+        } else if (response.data?.message) {
+          errorMsg = response.data.message;
+        }
+        
+        setError(errorMsg);
+        return { success: false, error: errorMsg };
+      } else {
+        // Handle other error responses
+        const errorMsg = response.data?.message || 'Registration failed. Please try again.';
+        setError(errorMsg);
+        return { success: false, error: errorMsg };
+      }
+    } catch (error) {
+      console.error('Registration error:', error);
+      
+      let errorMsg = 'An error occurred during registration. Please try again.';
+      
+      if (error.response?.status === 400) {
+        if (error.response.data?.message?.toLowerCase().includes('email already')) {
+          errorMsg = 'This email is already registered. Please use a different email or log in.';
+        } else if (error.response.data?.errors) {
+          errorMsg = error.response.data.errors.map(e => e.msg).join('. ');
+        } else if (error.response.data?.message) {
+          errorMsg = error.response.data.message;
+        }
+      }
+      
+      setError(errorMsg);
+      return { success: false, error: errorMsg };
+    }
+  };
+
+  // Logout function
+  const logout = useCallback(async () => {
+    try {
+      // Clear local auth data immediately for better UX
+      const wasLoggedIn = !!user || !!localStorage.getItem('token');
+      
+      // Clear tokens from both cookie and localStorage
+      document.cookie = 'token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+      localStorage.removeItem('token');
+      
+      // Reset user state
+      setUser(null);
+      setError(null);
+      
+      // Reset the auth check flag to allow re-checking
+      hasCheckedAuth.current = false;
+      
+      // Only try to call the logout API if we were actually logged in
+      if (wasLoggedIn) {
+        await axios.post(
+          `${API_BASE_URL}/api/user/logout`, 
+          {}, 
+          { 
+            withCredentials: true,
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            // Don't throw on network errors to ensure we always clear local state
+            validateStatus: () => true
+          }
+        );
+      }
+      
+      // Redirect to home page
+      navigate('/', { replace: true });
+    } catch (error) {
+      console.error('Logout failed:', error);
+      // Still redirect to home even if logout API call fails
+      navigate('/', { replace: true });
+    }
+  }, [navigate, user]);
+
+  return (
+    <AuthContext.Provider 
+      value={{ 
+        user, 
+        loading, 
+        error, 
+        login, 
+        register, 
+        logout,
+        requireAuth
+      }}
+    >
+      {!loading && children}
+    </AuthContext.Provider>
+  );
+};
+
+// Export the context as default
+export default AuthContext;

@@ -1,0 +1,16 @@
+{
+  "status": "commited",
+  "type": "backend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:5000",
+  "backendAuthType": "public",
+  "executionArgs": {
+    "projectName": "automatic-garbanzo",
+    "projectPath": "c:\\Users\\hp\\Desktop\\New\\automatic-garbanzo",
+    "testIds": [],
+    "additionalInstruction": "Focus on testing the user authentication, user roles, and dashboard access control.",
+    "envs": {
+      "API_KEY": "sk-user-sTOI5T9WQ1w6sfPLWJcKvlDKuhHJ2ShcQ0ARVIxncIZHhGl_ffLVeRhpmehoR_krVNuIpjdU5FwHQIexX70UGRH9noc5F0CzMA-x1jX0_pz4dtc6LuToHTVbPfdx7rogsLM"
+    }
+  }
+}
