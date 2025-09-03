@@ -385,6 +385,8 @@ const PORT = process.env.PORT || 5000;
 // Create the server
 const server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+  console.log(`NODE_ENV: ${process.env.NODE_ENV || 'development'}`);
+  console.log('Connected to MongoDB');
 });
 
 // Handle uncaught exceptions
