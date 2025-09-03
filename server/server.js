@@ -34,8 +34,17 @@ const logger = require('./utils/logger');
 
 // CORS configuration
 const allowedOrigins = process.env.NODE_ENV === 'production' 
-  ? [process.env.CORS_ORIGIN || 'https://yourdomain.com', 'https://checkout.chapa.co']
-  : ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:3000', 'https://checkout.chapa.co'];
+  ? [
+      'https://improved-food-delivery.onrender.com',
+      'https://checkout.chapa.co',
+      process.env.CORS_ORIGIN || 'https://yourdomain.com'
+    ]
+  : [
+      'http://localhost:5173', 
+      'http://localhost:5174', 
+      'http://localhost:3000', 
+      'https://checkout.chapa.co'
+    ];
 
 const corsOptions = {
   origin: function (origin, callback) {
@@ -113,6 +122,15 @@ app.use(cors(corsOptions));
 
 // Handle preflight requests
 app.options('*', cors(corsOptions));
+
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    dbStatus: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
+    timestamp: new Date().toISOString()
+  });
+});
 
 // Security headers middleware
 app.use((req, res, next) => {
