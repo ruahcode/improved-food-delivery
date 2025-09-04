@@ -4,6 +4,7 @@ import axios from 'axios';
 import { FaSpinner, FaExclamationCircle, FaArrowLeft, FaShoppingCart, FaStar } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import useCart from '../../hooks/useCart';
+import API_BASE_URL from '../config';
 
 const RestaurantMenu = () => {
   const { addToCart } = useCart();
@@ -25,14 +26,14 @@ const RestaurantMenu = () => {
         setLoading(true);
         setError('');
 
-        const restaurantRes = await axios.get(`http://localhost:5000/api/restaurant/${restaurantId}`);
+        const restaurantRes = await axios.get(`${API_BASE_URL}/restaurant/${restaurantId}`);
         if (restaurantRes.data) {
           setRestaurant(restaurantRes.data);
         } else {
           setError('Restaurant not found.');
         }
 
-        const menuRes = await axios.get(`http://localhost:5000/api/menu-items/restaurant/${restaurantId}`);
+        const menuRes = await axios.get(`${API_BASE_URL}/menu-items/restaurant/${restaurantId}`);
         if (menuRes.data) {
           setMenuItems(menuRes.data);
           // Initialize quantities for each menu item to 1
@@ -98,7 +99,7 @@ const RestaurantMenu = () => {
       );
       
       // Then sync with server
-      const response = await axios.post('http://localhost:5000/api/cart',
+      const response = await axios.post(`${API_BASE_URL}/cart`,
         {
           userId,
           restaurantId: menuItem.restaurantId,

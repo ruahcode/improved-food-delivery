@@ -5,6 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { FaStar, FaClock, FaMapMarkerAlt, FaPlus, FaMinus, FaUtensils, FaShoppingCart } from 'react-icons/fa';
 import axios from 'axios';
 import useCart from '../hooks/useCart';
+import API_BASE_URL from '../config';
 
 // Default restaurant data structure
 const defaultRestaurant = {
@@ -47,14 +48,14 @@ const RestaurantMenu = () => {
         setError(null);
         
         // First, try to get the restaurant details
-        const restaurantRes = await axios.get(`http://localhost:5000/api/restaurant/${id}`);
+        const restaurantRes = await axios.get(`${API_BASE_URL}/restaurant/${id}`);
         
         if (!restaurantRes.data) {
           throw new Error('Restaurant not found');
         }
         
         // Then get the menu items for this restaurant
-        const menuRes = await axios.get(`http://localhost:5000/api/menuItem/restaurant/${id}`);
+        const menuRes = await axios.get(`${API_BASE_URL}/menuItem/restaurant/${id}`);
         
         // Update restaurant state with fetched data
         const restaurantData = restaurantRes.data;
