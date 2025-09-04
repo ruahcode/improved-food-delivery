@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useRef, useMemo, createContext
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 import API_BASE_URL from '../config';
-import { apiRequest } from '../utils/api';
+import { getApiUrl } from '../utils/api';
 import TokenManager from '../utils/tokenManager';
 
 // Create the auth context
@@ -61,15 +61,18 @@ export const AuthProvider = ({ children }) => {
       
       setLoading(true);
       
-      // Use the apiRequest utility which handles the base URL and errors
-      const { data, error, status } = await apiRequest('/user/me', {
+      // Make API request to get user data
+      const response = await axios.get(getApiUrl('user/me'), {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
+      
+      const data = response.data;
+      const status = response.status;
 
-      if (error) {
-        console.log('API Request Error:', error);
+      if (status !== 200) {
+        console.log('API Request failed with status:', status);
         if (status === 401) {
           // Token is invalid, expired - clear auth data
           console.log('Authentication failed - clearing auth data');
@@ -96,11 +99,14 @@ export const AuthProvider = ({ children }) => {
         }
       }
     } catch (err) {
-      console.log('Error fetching user data:', err.message);
-      if (err.response?.status === 401 || err.response?.status === 500) {
-        // Token is invalid, expired, or server error - clear auth data
-        console.log('Authentication failed');
+      if (err.response?.status === 401) {
+        // Token is invalid/expired - clear auth data (this is expected)
         clearAuthData();
+      } else {
+        console.log('Error fetching user data:', err.message);
+        if (err.response?.status === 500) {
+          clearAuthData();
+        }
       }
     } finally {
       setLoading(false);
@@ -146,15 +152,14 @@ export const AuthProvider = ({ children }) => {
     try {
       console.log('Attempting login for:', email);
       
-      const { data, error, status } = await apiRequest('/user/login', {
-        method: 'POST',
-        data: { email, password }
-      });
+      const response = await axios.post(getApiUrl('user/login'), { email, password });
+      const data = response.data;
+      const status = response.status;
 
       console.log('Login API response:', { data, error, status });
 
-      if (error || !data || !data.success) {
-        const errorMessage = error || data?.message || 'Login failed';
+      if (!data || !data.success) {
+        const errorMessage = data?.message || 'Login failed';
         console.error('Login failed:', errorMessage);
         setError(errorMessage);
         return { success: false, error: errorMessage };
@@ -235,19 +240,14 @@ export const AuthProvider = ({ children }) => {
       console.log('Registration data being sent:', registrationData);
       console.log('API base URL:', import.meta.env.VITE_API_BASE_URL);
       
-      const { data, error } = await apiRequest('/user/register', {
-        method: 'POST',
-        data: registrationData
-      });
+      const response = await axios.post(getApiUrl('user/register'), registrationData);
+      const data = response.data;
 
       console.log('Registration response:', { data, error });
       console.log('Full response data:', data);
       console.log('Error details:', error);
 
-      if (error) {
-        console.log('Registration failed with error:', error);
-        throw new Error(error || 'Registration failed');
-      }
+
       
       if (!data || !data.success) {
         console.log('Registration failed - no success in response:', data);

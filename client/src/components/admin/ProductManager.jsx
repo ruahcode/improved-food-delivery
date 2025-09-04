@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
+import { getApiUrl } from '../../utils/api';
 // import {
 //   useReactTable,
 //   getCoreRowModel,
@@ -32,7 +33,7 @@ const ProductManager = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:5000/api/restaurants');
+      const response = await fetch(getApiUrl('restaurants'));
       if (response.ok) {
         const data = await response.json();
         setProducts(Array.isArray(data) ? data : []);
@@ -48,7 +49,7 @@ const ProductManager = () => {
   // Fetch restaurants on component mount
   const fetchRestaurants = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/restaurants');
+      const response = await fetch(getApiUrl('restaurants'));
       if (response.ok) {
         const data = await response.json();
         setRestaurants(Array.isArray(data) ? data : []);
@@ -78,8 +79,8 @@ const ProductManager = () => {
     try {
       const method = currentProduct ? 'PUT' : 'POST';
       const url = currentProduct 
-        ? `http://localhost:5000/api/restaurants/${currentProduct._id}`
-        : 'http://localhost:5000/api/restaurants';
+        ? getApiUrl(`restaurants/${currentProduct._id}`)
+        : getApiUrl('restaurants');
       
       const response = await fetch(url, {
         method,
@@ -100,7 +101,7 @@ const ProductManager = () => {
         toast.success(currentProduct ? 'Restaurant updated successfully' : 'Restaurant added successfully');
         setIsModalOpen(false);
         // Refresh restaurants
-        const restaurantsResponse = await fetch('http://localhost:5000/api/restaurants');
+        const restaurantsResponse = await fetch(getApiUrl('restaurants'));
         if (restaurantsResponse.ok) {
           const restaurantsData = await restaurantsResponse.json();
           setProducts(Array.isArray(restaurantsData) ? restaurantsData : []);
@@ -133,7 +134,7 @@ const ProductManager = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this restaurant?')) {
       try {
-        const response = await fetch(`http://localhost:5000/api/restaurants/${id}`, { 
+        const response = await fetch(getApiUrl(`restaurants/${id}`), { 
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -142,7 +143,7 @@ const ProductManager = () => {
         if (response.ok) {
           toast.success('Restaurant deleted successfully');
           // Refresh restaurants
-          const restaurantsResponse = await fetch('http://localhost:5000/api/restaurants');
+          const restaurantsResponse = await fetch(getApiUrl('restaurants'));
           if (restaurantsResponse.ok) {
             const restaurantsData = await restaurantsResponse.json();
             setProducts(Array.isArray(restaurantsData) ? restaurantsData : []);

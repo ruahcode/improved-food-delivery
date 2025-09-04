@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import useAuth from '../../hooks/useAuth';
+import { getApiUrl } from '../../utils/api';
 
 const AdminDashboard = () => {
   const { user } = useAuth();
@@ -16,7 +17,7 @@ const AdminDashboard = () => {
   const fetchAnalytics = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/admin/analytics', {
+      const response = await axios.get(getApiUrl('admin/analytics'), {
         headers: { Authorization: `Bearer ${token}` }
       });
       

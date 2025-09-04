@@ -3,6 +3,7 @@ import { FaStar, FaMotorcycle, FaShoppingBag, FaHeart, FaRegHeart, FaChevronDown
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { getApiUrl } from '../utils/api';
 
 const RestaurantCard = ({ restaurant }) => {
   // Default values in case props are not provided
@@ -37,7 +38,7 @@ const RestaurantCard = ({ restaurant }) => {
       setLoadingMenu(true);
       setError(null);
       try {
-        const response = await axios.get(`http://localhost:5000/api/menuItem/restaurant/${id}`);
+        const response = await axios.get(getApiUrl(`menuItem/restaurant/${id}`));
         setMenuItems(response.data);
       } catch (err) {
         console.error('Error fetching menu items:', err);

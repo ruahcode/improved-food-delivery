@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FaStar, FaMotorcycle } from 'react-icons/fa';
 import axios from 'axios';
 import useCart from '../../hooks/useCart';
+import { getApiUrl } from '../../utils/api';
 
 const PopularRestaurants = () => {
   const [restaurants, setRestaurants] = useState([]);
@@ -15,7 +16,7 @@ const PopularRestaurants = () => {
     const fetchPopularRestaurants = async () => {
       try {
         // Make sure to use the correct API URL based on your backend configuration
-        const response = await axios.get('http://localhost:5000/api/restaurant/popular');
+        const response = await axios.get(getApiUrl('restaurant/popular'));
         setRestaurants(response.data);
         setLoading(false);
       } catch (err) {

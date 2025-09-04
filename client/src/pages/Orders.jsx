@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FaCheckCircle, FaClock, FaTimesCircle, FaBoxOpen, FaTrash, FaTrashAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import { getApiUrl } from '../utils/api';
 
 const statusStyles = {
   new: 'bg-blue-100 text-blue-700',
@@ -53,7 +54,7 @@ const Orders = () => {
         
         console.log('Fetching orders with token:', token.substring(0, 10) + '...');
         
-        const response = await axios.get('http://localhost:5000/api/order', {
+        const response = await axios.get(getApiUrl('order'), {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
@@ -180,7 +181,7 @@ const Orders = () => {
         throw new Error('No authentication token found');
       }
       
-      const response = await axios.delete(`http://localhost:5000/api/order/${orderId}`, {
+      const response = await axios.delete(getApiUrl(`order/${orderId}`), {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -248,7 +249,7 @@ const Orders = () => {
       // Delete all orders in parallel
       await Promise.all(
         orderIds.map(orderId => 
-          axios.delete(`http://localhost:5000/api/order/${orderId}`, {
+          axios.delete(getApiUrl(`order/${orderId}`), {
             headers: {
               'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json'

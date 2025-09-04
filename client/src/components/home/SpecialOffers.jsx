@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FaTag, FaPercentage, FaDollarSign } from 'react-icons/fa';
+import { getApiUrl } from '../../utils/api';
 
 const SpecialOffers = () => {
   const [offers, setOffers] = useState([]);
@@ -10,7 +11,7 @@ const SpecialOffers = () => {
   useEffect(() => {
     const fetchSpecialOffers = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/promoCode/active');
+        const response = await axios.get(getApiUrl('promoCode/active'));
         setOffers(response.data);
         setLoading(false);
       } catch (err) {

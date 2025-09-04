@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FaStar, FaPlus } from 'react-icons/fa';
 import useCart from '../hooks/useCart';
+import { getApiUrl } from '../utils/api';
 
 const CategoryResults = () => {
   const { category } = useParams();
@@ -16,8 +17,8 @@ const CategoryResults = () => {
     const fetchCategoryItems = async () => {
       try {
         const [menuResponse, restaurantResponse] = await Promise.all([
-          axios.get('http://localhost:5000/api/menuitem'),
-          axios.get('http://localhost:5000/api/restaurant/all')
+          axios.get(getApiUrl('menuitem')),
+          axios.get(getApiUrl('restaurant/all'))
         ]);
         
         const restaurants = restaurantResponse.data;

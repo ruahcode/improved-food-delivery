@@ -5,6 +5,7 @@ import { FiFilter, FiClock, FiStar, FiDollarSign, FiChevronDown, FiChevronLeft, 
 import { FaStar, FaRegStar, FaStarHalfAlt } from 'react-icons/fa';
 import RestaurantCard from '../components/RestaurantCard';
 import { useCategory } from '../context/CategoryContext';
+import { getApiUrl } from '../utils/api';
 
 const RestaurantListing = () => {
   const location = useLocation();
@@ -59,7 +60,7 @@ const RestaurantListing = () => {
           setSearchType(location.state.searchType || '');
         } else {
           // Fetch all restaurants
-          const response = await axios.get('http://localhost:5000/api/restaurant/all');
+          const response = await axios.get(getApiUrl('restaurant/all'));
           const formattedRestaurants = response.data.map(restaurant => ({
             ...restaurant,
             id: restaurant._id,
@@ -90,17 +91,17 @@ const RestaurantListing = () => {
   // Fetch filter data from backend
   useEffect(() => {
     // Fetch cuisines
-    axios.get('http://localhost:5000/api/restaurant/cuisines')
+    axios.get(getApiUrl('restaurant/cuisines'))
       .then(res => setCuisines(res.data.map((c, i) => ({ id: i, name: c }))))
       .catch(() => setCuisines([]));
 
     // Fetch delivery options
-    axios.get('http://localhost:5000/api/menuitem/delivery-options')
+    axios.get(getApiUrl('menuitem/delivery-options'))
       .then(res => setDeliveryOptions(res.data.map((d, i) => ({ id: d, label: d.charAt(0).toUpperCase() + d.slice(1).replace('-', ' ') }))))
       .catch(() => setDeliveryOptions([]));
 
     // Fetch popular filters
-    axios.get('http://localhost:5000/api/menuitem/popular-filters')
+    axios.get(getApiUrl('menuitem/popular-filters'))
       .then(res => setPopularFilters(res.data.map((f, i) => ({
         id: f,
         label: f === 'rating' ? 'Rating 4.0+' : f.charAt(0).toUpperCase() + f.slice(1)
