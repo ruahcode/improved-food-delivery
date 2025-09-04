@@ -36,6 +36,7 @@ const logger = require('./utils/logger');
 const allowedOrigins = process.env.NODE_ENV === 'production' 
   ? [
       'https://improved-food-delivery.onrender.com',
+      'https://improved-food-delivery-1.onrender.com',
       'https://checkout.chapa.co',
       process.env.CORS_ORIGIN || 'https://yourdomain.com'
     ]
