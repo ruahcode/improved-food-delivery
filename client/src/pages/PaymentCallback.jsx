@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { FaCheckCircle, FaTimesCircle, FaSpinner, FaShoppingCart, FaHome } from 'react-icons/fa';
 import { toast } from 'react-toastify';
-import { apiRequest } from '../utils/api';
+import { getApiUrl } from '../utils/api';
+import axios from 'axios';
 
 const PaymentCallback = () => {
   const { orderId } = useParams();
@@ -39,19 +40,13 @@ const PaymentCallback = () => {
       console.log(`Verifying payment using endpoint: ${verifyEndpoint}`);
 
       // Verify payment status with the server
-      const { data, error: apiError } = await apiRequest(
-        verifyEndpoint,
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
+      const response = await axios.get(getApiUrl(verifyEndpoint), {
+        headers: {
+          'Authorization': `Bearer ${token}`,
         },
-        { showLoader: true }
-      );
-
-      if (apiError) {
-        throw new Error(apiError);
-      }
+      });
+      
+      const data = response.data;
 
       if (data.success) {
         setOrder(data.order || data);
