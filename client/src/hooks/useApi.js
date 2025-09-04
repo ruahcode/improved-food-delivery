@@ -1,7 +1,6 @@
 import { useState, useCallback } from 'react';
-// Using _ to indicate this is intentionally unused
-// We're only importing for the type definition in JSDoc
-import { apiRequest as _apiRequest } from '../utils/api';
+// Note: apiRequest was removed from utils/api.js
+// This hook now works with any API call function
 
 /**
  * Custom hook for handling API requests with loading and error states

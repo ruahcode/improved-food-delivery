@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import useAuth from '../../hooks/useAuth';
 import { toast } from 'react-toastify';
-import { apiRequest } from '../../utils/api';
+import { getApiUrl } from '../../utils/api';
+import axios from 'axios';
 
 const Settings = () => {
   const { user, updateUser } = useAuth();
@@ -82,16 +83,13 @@ const Settings = () => {
 
     setLoading(true);
     try {
-      const { data, error } = await apiRequest('/users/me', {
-        method: 'PUT',
-        data: {
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-        }
+      const response = await axios.put(getApiUrl('users/me'), {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
       });
-
-      if (error) throw error;
+      
+      const data = response.data;
 
       // Update user in context
       updateUser(data.user);
@@ -110,15 +108,10 @@ const Settings = () => {
 
     setLoading(true);
     try {
-      const { error } = await apiRequest('/users/change-password', {
-        method: 'POST',
-        data: {
-          currentPassword: formData.currentPassword,
-          newPassword: formData.newPassword,
-        }
+      await axios.post(getApiUrl('users/change-password'), {
+        currentPassword: formData.currentPassword,
+        newPassword: formData.newPassword,
       });
-
-      if (error) throw error;
 
       // Clear password fields
       setFormData(prev => ({

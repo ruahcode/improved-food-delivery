@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import useAuth from '../hooks/useAuth';
-import { apiRequest } from '../utils/api';
+import { getApiUrl } from '../utils/api';
+import axios from 'axios';
 import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaEdit, FaSave, FaTimes } from 'react-icons/fa';
 
 const UserProfile = () => {
@@ -55,15 +56,8 @@ const UserProfile = () => {
   
     try {
       // Correct endpoint per server UserRoutesFixed: PUT /me mounted at /api/users
-      const { data, error } = await apiRequest('/users/me', {
-        method: 'PUT',
-        data: formData
-      });
-  
-      if (error) {
-        setError(error);
-        return;
-      }
+      const response = await axios.put(getApiUrl('users/me'), formData);
+      const data = response.data;
   
       if (data.success) {
         updateUser(data.user);
