@@ -16,6 +16,7 @@ import useCart from '../hooks/useCart';
 import useAuth from '../hooks/useAuth';
 import { validateCheckoutData, validateCartItems } from '../utils/checkoutValidation';
 import { makeAuthenticatedRequest } from '../utils/tokenRefresh';
+import API_BASE_URL from '../config';
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -168,7 +169,7 @@ const Checkout = () => {
       console.log('Sending order data:', orderData);
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'}/orders/checkout`,
+        `${API_BASE_URL}/orders/checkout`,
         orderData,
         { 
           headers: { 
@@ -261,14 +262,14 @@ const Checkout = () => {
             country: 'Ethiopia',
             // Use the existing payment success/failure routes
             return_url: `${window.location.origin}/payment/success/${order._id}`,
-            callback_url: `${import.meta.env.VITE_API_BASE_URL}/payment/webhook`,
+            callback_url: `${API_BASE_URL}/payment/webhook`,
             // For development, you can add a test flag if needed
             ...(import.meta.env.MODE === 'development' && { test: 'true' })
           };
           
           // Call payment API directly
           const response = await axios.post(
-            `${import.meta.env.VITE_API_BASE_URL}/payment`,
+            `${API_BASE_URL}/payment`,
             paymentPayload,
             {
               headers: { Authorization: `Bearer ${token}` },
