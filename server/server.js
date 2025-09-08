@@ -33,18 +33,16 @@ const {
 const logger = require('./utils/logger');
 
 // CORS configuration
-const allowedOrigins = process.env.NODE_ENV === 'production' 
-  ? [
-      'https://food-delivery-nihp.onrender.com',
-      'https://checkout.chapa.co',
-      process.env.CORS_ORIGIN || 'https://yourdomain.com'
-    ]
-  : [
-      'http://localhost:5173', 
-      'http://localhost:5174', 
-      'http://localhost:3000', 
-      'https://checkout.chapa.co'
-    ];
+const allowedOrigins = [
+  // Production
+  'https://food-delivery-nihp.onrender.com',
+  'https://food-delivery-y96l.onrender.com',
+  'https://checkout.chapa.co',
+  // Development
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:3000'
+];
 
 const corsOptions = {
   origin: function (origin, callback) {
