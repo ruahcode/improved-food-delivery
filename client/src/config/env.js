@@ -5,7 +5,7 @@
 
 export const env = {
   // API Configuration
-  apiBaseUrl: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api',
+  apiBaseUrl: import.meta.env.VITE_API_BASE_URL || 'https://food-delivery-y96l.onrender.com/api',
   
   // App Configuration
   appName: import.meta.env.VITE_APP_NAME || 'Sturdy Memory',
