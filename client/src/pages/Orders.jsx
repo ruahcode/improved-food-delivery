@@ -37,6 +37,9 @@ const Orders = () => {
   const [error, setError] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [orderToDelete, setOrderToDelete] = useState(null);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [confirmAction, setConfirmAction] = useState(null);
+  const [confirmMessage, setConfirmMessage] = useState('');
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -130,47 +133,27 @@ const Orders = () => {
     })
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
+  const showConfirmation = (message, action) => {
+    setConfirmMessage(message);
+    setConfirmAction(() => action);
+    setShowConfirmModal(true);
+  };
+
+  const handleConfirm = () => {
+    setShowConfirmModal(false);
+    if (confirmAction) confirmAction();
+  };
+
+  const handleCancel = () => {
+    setShowConfirmModal(false);
+    setConfirmAction(null);
+  };
+
   const handleDeleteOrder = async (orderId) => {
     const orderToDelete = orders.find(order => order._id === orderId);
     const orderNumber = orderToDelete?._id.slice(-5) || '';
     
-    const result = await new Promise((resolve) => {
-      const toastId = toast.info(
-        <div className="text-center">
-          <p className="font-medium mb-2">Delete Order #{orderNumber}?</p>
-          <div className="flex justify-center gap-3 mt-3">
-            <button 
-              onClick={() => {
-                toast.dismiss(toastId);
-                resolve(false);
-              }}
-              className="px-4 py-1 bg-gray-200 hover:bg-gray-300 rounded-md text-sm"
-            >
-              Cancel
-            </button>
-            <button 
-              onClick={() => {
-                toast.dismiss(toastId);
-                resolve(true);
-              }}
-              className="px-4 py-1 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm"
-            >
-              Delete
-            </button>
-          </div>
-        </div>,
-        {
-          autoClose: false,
-          closeButton: false,
-          closeOnClick: false,
-          draggable: false,
-          position: 'top-center',
-          className: 'w-full max-w-md',
-        }
-      );
-    });
-    
-    if (!result) return;
+    showConfirmation(`Delete Order #${orderNumber}?`, async () => {
     
     try {
       setIsDeleting(true);
@@ -178,24 +161,20 @@ const Orders = () => {
       
       const token = localStorage.getItem('token');
       if (!token) {
-        throw new Error('No authentication token found');
+        toast.error('Please log in to delete orders');
+        return;
       }
       
       const response = await axios.delete(getApiUrl(`order/${orderId}`), {
         headers: {
           'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
+          'Content-Type': 'application/json'
         },
         withCredentials: true
       });
       
-      if (response.data?.success) {
-        setOrders(prevOrders => prevOrders.filter(order => order._id !== orderId));
-        toast.success(response.data.message || 'Order deleted successfully');
-      } else {
-        throw new Error(response.data?.message || 'Failed to delete order');
-      }
+      setOrders(prevOrders => prevOrders.filter(order => order._id !== orderId));
+      toast.success('Order deleted successfully');
     } catch (error) {
       console.error('Error deleting order:', error);
       toast.error('Failed to delete order');
@@ -203,63 +182,30 @@ const Orders = () => {
       setIsDeleting(false);
       setOrderToDelete(null);
     }
+    });
   };
 
   const handleClearAllOrders = async () => {
-    const result = await new Promise((resolve) => {
-      toast.info(
-        <div className="text-center">
-          <p className="font-medium mb-2">Delete all {paidOrders.length} orders?</p>
-          <p className="text-sm text-gray-600 mb-3">This action cannot be undone.</p>
-          <div className="flex justify-center gap-3 mt-3">
-            <button 
-              onClick={() => resolve(false)}
-              className="px-4 py-1 bg-gray-200 hover:bg-gray-300 rounded-md text-sm"
-            >
-              Cancel
-            </button>
-            <button 
-              onClick={() => resolve(true)}
-              className="px-4 py-1 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm"
-            >
-              Delete All
-            </button>
-          </div>
-        </div>,
-        {
-          autoClose: false,
-          closeButton: false,
-          closeOnClick: false,
-          draggable: false,
-          position: 'top-center',
-          className: 'w-full max-w-md',
-        }
-      );
-    });
-    
-    if (!result) return;
+    showConfirmation(`Delete all ${paidOrders.length} orders? This action cannot be undone.`, async () => {
     
     try {
       setIsDeleting(true);
       const token = localStorage.getItem('token');
       
-      // Get all order IDs to delete
-      const orderIds = paidOrders.map(order => order._id);
+      if (!token) {
+        toast.error('Please log in to delete orders');
+        return;
+      }
       
-      // Delete all orders in parallel
-      await Promise.all(
-        orderIds.map(orderId => 
-          axios.delete(getApiUrl(`order/${orderId}`), {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            }
-          })
-        )
-      );
+      const response = await axios.delete(getApiUrl('order/user/me'), {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        withCredentials: true
+      });
       
-      // Clear all orders from state
-      setOrders(orders.filter(order => !orderIds.includes(order._id)));
+      setOrders([]);
       toast.success('All orders have been deleted');
     } catch (error) {
       console.error('Error clearing orders:', error);
@@ -267,6 +213,7 @@ const Orders = () => {
     } finally {
       setIsDeleting(false);
     }
+    });
   };
   
   console.log('Filtered orders:', paidOrders.map(o => ({
@@ -306,7 +253,7 @@ const Orders = () => {
                 <button
                   onClick={() => handleDeleteOrder(order._id)}
                   disabled={isDeleting && orderToDelete === order._id}
-                  className="absolute top-3 right-3 p-2 text-gray-400 hover:text-red-500 transition-colors"
+                  className="absolute top-3 right-3 p-2 text-gray-400 hover:text-red-500 transition-colors disabled:cursor-not-allowed"
                   title="Delete order"
                 >
                   {isDeleting && orderToDelete === order._id ? (
@@ -351,6 +298,30 @@ const Orders = () => {
                 )}
               </div>
             ))}
+          </div>
+        )}
+        
+        {/* Confirmation Modal */}
+        {showConfirmModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 max-w-sm mx-4 shadow-xl">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Confirm Action</h3>
+              <p className="text-gray-600 mb-6">{confirmMessage}</p>
+              <div className="flex gap-3 justify-end">
+                <button
+                  onClick={handleCancel}
+                  className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleConfirm}
+                  className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>
