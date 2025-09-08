@@ -55,7 +55,7 @@ const RestaurantListing = () => {
           setSearchType(location.state.searchType || '');
         } else {
           // Fetch all restaurants
-          const response = await axios.get(getApiUrl('restaurant/all'));
+          const response = await axios.get(getApiUrl('restaurants/all'));
           const formattedRestaurants = response.data.map(restaurant => ({
             ...restaurant,
             id: restaurant._id,
@@ -86,12 +86,12 @@ const RestaurantListing = () => {
   // Fetch filter data from backend
   useEffect(() => {
     // Fetch cuisines
-    axios.get(getApiUrl('restaurant/cuisines'))
+    axios.get(getApiUrl('restaurants/cuisines'))
       .then(res => setCuisines(res.data.map((c, i) => ({ id: i, name: c }))))
       .catch(() => setCuisines([]));
 
     // Fetch delivery options
-    axios.get(getApiUrl('menuitem/delivery-options'))
+    axios.get(getApiUrl('menu-items/delivery-options'))
       .then(res => setDeliveryOptions(res.data.map((d, i) => ({ id: d, label: d.charAt(0).toUpperCase() + d.slice(1).replace('-', ' ') }))))
       .catch(() => setDeliveryOptions([]));
   }, []);

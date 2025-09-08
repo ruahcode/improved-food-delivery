@@ -11,7 +11,7 @@ const SpecialOffers = () => {
   useEffect(() => {
     const fetchSpecialOffers = async () => {
       try {
-        const response = await axios.get(getApiUrl('promoCode/active'));
+        const response = await axios.get(getApiUrl('promo-codes/active'));
         setOffers(response.data);
         setLoading(false);
       } catch (err) {
