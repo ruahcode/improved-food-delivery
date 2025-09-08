@@ -71,7 +71,7 @@ A full-stack food delivery application built with the MERN stack (MongoDB, Expre
 
 5. Create a `.env` file in the `client` directory:
    ```env
-   REACT_APP_API_URL=http://localhost:5173
+   REACT_APP_API_URL=http://localhost:5000
    ```
 
 ## Running the Application
@@ -88,7 +88,32 @@ A full-stack food delivery application built with the MERN stack (MongoDB, Expre
    npm start
    ```
 
-3. Access the application at `http://localhost:5173`
+3. Access the application at `http://localhost:3000`
+
+## Deployment
+
+### Live Application
+- **Frontend**: https://food-delivery-nihp.onrender.com
+- **Backend**: https://food-delivery-y96l.onrender.com
+
+### Production Environment Variables
+
+For production deployment, update your environment variables:
+
+**Client `.env`:**
+```env
+REACT_APP_API_URL=https://food-delivery-y96l.onrender.com
+```
+
+**Server `.env`:**
+```env
+MONGODB_URI=your_production_mongodb_connection_string
+JWT_SECRET=your_secure_jwt_secret
+NODE_ENV=production
+PORT=5000
+CHAPA_PUBLIC_KEY=your_chapa_public_key
+CHAPA_SECRET_KEY=your_chapa_secret_key
+```
 
 ## Testing
 
