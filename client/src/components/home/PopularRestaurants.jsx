@@ -16,7 +16,7 @@ const PopularRestaurants = () => {
     const fetchPopularRestaurants = async () => {
       try {
         // Make sure to use the correct API URL based on your backend configuration
-        const response = await axios.get(getApiUrl('restaurants/popular'));
+        const response = await axios.get(getApiUrl('restaurant/popular'));
         setRestaurants(response.data);
         setLoading(false);
       } catch (err) {
