@@ -1,0 +1,52 @@
+[
+  {
+    "id": "TC001",
+    "title": "user registration and login",
+    "description": "Test the user registration and login endpoints to ensure successful account creation, secure password encryption, and JWT token issuance for authenticated access."
+  },
+  {
+    "id": "TC002",
+    "title": "restaurant management crud operations",
+    "description": "Verify CRUD operations on restaurant endpoints including listing, details retrieval, creation, update, and deletion with proper authorization for restaurant owners."
+  },
+  {
+    "id": "TC003",
+    "title": "menu item management",
+    "description": "Test the menu item endpoints for full CRUD functionality ensuring only authorized restaurant owners can manage menu items."
+  },
+  {
+    "id": "TC004",
+    "title": "shopping cart functionality",
+    "description": "Validate shopping cart endpoints for adding items, updating quantities, removing items, and retrieving cart state with persistence."
+  },
+  {
+    "id": "TC005",
+    "title": "order processing and tracking",
+    "description": "Test order creation, status updates, retrieval of order history, and order tracking endpoints for both customers and restaurants."
+  },
+  {
+    "id": "TC006",
+    "title": "payment gateway integration",
+    "description": "Verify payment processing through the Chapa payment gateway including payment initiation, callback handling, and transaction status updates."
+  },
+  {
+    "id": "TC007",
+    "title": "admin dashboard management",
+    "description": "Test admin endpoints for managing users, restaurants, orders, support tickets, and analytics data with appropriate access control."
+  },
+  {
+    "id": "TC008",
+    "title": "search and filtering functionality",
+    "description": "Validate search and filtering endpoints to ensure accurate and relevant results for restaurants and menu items based on user queries and filters."
+  },
+  {
+    "id": "TC009",
+    "title": "promo code application and validation",
+    "description": "Test promo code endpoints to verify correct application of discounts, validation of usage limits, and expiration handling."
+  },
+  {
+    "id": "TC010",
+    "title": "security middleware enforcement",
+    "description": "Verify security middleware including rate limiting, input validation, and JWT authentication to prevent unauthorized access and protect against attacks."
+  }
+]

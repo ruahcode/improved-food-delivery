@@ -1,0 +1,780 @@
+[
+  {
+    "id": "TC001",
+    "title": "User Registration Success",
+    "description": "Verify that a new user can successfully register with valid credentials and receives a JWT token.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to registration page."
+      },
+      {
+        "type": "action",
+        "description": "Enter valid user details including username, email, and password."
+      },
+      {
+        "type": "action",
+        "description": "Submit registration form."
+      },
+      {
+        "type": "assertion",
+        "description": "System creates user account, encrypts password, and returns valid JWT token."
+      }
+    ]
+  },
+  {
+    "id": "TC002",
+    "title": "User Registration with Existing Email",
+    "description": "Verify that registering with an already used email returns proper error.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to registration page."
+      },
+      {
+        "type": "action",
+        "description": "Enter user details with an already registered email."
+      },
+      {
+        "type": "action",
+        "description": "Submit registration form."
+      },
+      {
+        "type": "assertion",
+        "description": "System returns error indicating email is already in use."
+      }
+    ]
+  },
+  {
+    "id": "TC003",
+    "title": "User Login Success",
+    "description": "Verify that a registered user can successfully log in and receive a valid JWT token.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to login page."
+      },
+      {
+        "type": "action",
+        "description": "Enter correct username/email and password."
+      },
+      {
+        "type": "action",
+        "description": "Click login button."
+      },
+      {
+        "type": "assertion",
+        "description": "System authenticates user and returns valid JWT token."
+      }
+    ]
+  },
+  {
+    "id": "TC004",
+    "title": "User Login Failure with Incorrect Password",
+    "description": "Verify login attempt with incorrect password is rejected with an error message.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to login page."
+      },
+      {
+        "type": "action",
+        "description": "Enter valid username/email and incorrect password."
+      },
+      {
+        "type": "action",
+        "description": "Click login button."
+      },
+      {
+        "type": "assertion",
+        "description": "System rejects login and displays invalid credentials error."
+      }
+    ]
+  },
+  {
+    "id": "TC005",
+    "title": "JWT Authentication Middleware Valid Token",
+    "description": "Verify that API endpoints allow access when a valid JWT token is provided.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Make API request to protected endpoint with valid JWT token in authorization header."
+      },
+      {
+        "type": "assertion",
+        "description": "System authenticates the request and processes it successfully."
+      }
+    ]
+  },
+  {
+    "id": "TC006",
+    "title": "JWT Authentication Middleware Invalid or Missing Token",
+    "description": "Verify that API endpoints reject requests without or with invalid JWT tokens.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Make API request to protected endpoint without JWT token."
+      },
+      {
+        "type": "assertion",
+        "description": "System responds with unauthorized access error."
+      },
+      {
+        "type": "action",
+        "description": "Make API request to protected endpoint with invalid or expired JWT token."
+      },
+      {
+        "type": "assertion",
+        "description": "System responds with unauthorized access error."
+      }
+    ]
+  },
+  {
+    "id": "TC007",
+    "title": "Restaurant Owner Restaurant Listing Creation",
+    "description": "Verify restaurant owners can create new restaurant listings with valid data.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as a valid restaurant owner."
+      },
+      {
+        "type": "action",
+        "description": "Navigate to create new restaurant listing page."
+      },
+      {
+        "type": "action",
+        "description": "Input valid restaurant details including name, address, and description."
+      },
+      {
+        "type": "action",
+        "description": "Submit the create listing form."
+      },
+      {
+        "type": "assertion",
+        "description": "System successfully creates restaurant listing and associates it with the owner."
+      }
+    ]
+  },
+  {
+    "id": "TC008",
+    "title": "Create Restaurant Listing with Missing Required Fields",
+    "description": "Verify the system validates required fields and prevents creation with invalid input.",
+    "category": "error handling",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as a restaurant owner."
+      },
+      {
+        "type": "action",
+        "description": "Navigate to create restaurant page."
+      },
+      {
+        "type": "action",
+        "description": "Submit the form leaving required fields empty."
+      },
+      {
+        "type": "assertion",
+        "description": "System rejects submission and displays appropriate validation error messages."
+      }
+    ]
+  },
+  {
+    "id": "TC009",
+    "title": "Menu Item CRUD Operations",
+    "description": "Verify restaurant owners can create, read, update, and delete menu items for their restaurant.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as a restaurant owner."
+      },
+      {
+        "type": "action",
+        "description": "Navigate to menu management page of a restaurant."
+      },
+      {
+        "type": "action",
+        "description": "Create a new menu item with valid details."
+      },
+      {
+        "type": "assertion",
+        "description": "New menu item is visible in the menu list."
+      },
+      {
+        "type": "action",
+        "description": "Update the menu item’s details."
+      },
+      {
+        "type": "assertion",
+        "description": "Changes are saved and reflected correctly."
+      },
+      {
+        "type": "action",
+        "description": "Delete the menu item."
+      },
+      {
+        "type": "assertion",
+        "description": "Menu item is removed from the list."
+      }
+    ]
+  },
+  {
+    "id": "TC010",
+    "title": "Menu Item Creation with Invalid Data",
+    "description": "Verify that menu item creation fails if invalid or missing data is provided.",
+    "category": "error handling",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as a restaurant owner."
+      },
+      {
+        "type": "action",
+        "description": "Navigate to create menu item page."
+      },
+      {
+        "type": "action",
+        "description": "Attempt to create a menu item without required fields (e.g., name or price)."
+      },
+      {
+        "type": "assertion",
+        "description": "System displays validation errors and prevents creation."
+      }
+    ]
+  },
+  {
+    "id": "TC011",
+    "title": "Browsing and Filtering Restaurants",
+    "description": "Verify users can browse restaurants and apply filters and search terms to narrow down listings.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the restaurant browsing page."
+      },
+      {
+        "type": "action",
+        "description": "Apply various filters (e.g., cuisine, rating, price range)."
+      },
+      {
+        "type": "action",
+        "description": "Enter search keywords to filter restaurant names or menu items."
+      },
+      {
+        "type": "assertion",
+        "description": "Listing updates to reflect applied filters and search terms showing correct relevant results."
+      }
+    ]
+  },
+  {
+    "id": "TC012",
+    "title": "Adding Items to Shopping Cart",
+    "description": "Verify users can add menu items to the shopping cart from a restaurant menu.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as a user."
+      },
+      {
+        "type": "action",
+        "description": "Navigate to a restaurant’s menu page."
+      },
+      {
+        "type": "action",
+        "description": "Select menu items and add them to the cart with specific quantities."
+      },
+      {
+        "type": "assertion",
+        "description": "Items appear in the shopping cart with correct quantities and prices."
+      }
+    ]
+  },
+  {
+    "id": "TC013",
+    "title": "Updating Shopping Cart Quantities and Removing Items",
+    "description": "Verify users can update item quantities and remove items from the cart with state persistence.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Open shopping cart page with existing items."
+      },
+      {
+        "type": "action",
+        "description": "Change the quantity of an existing item."
+      },
+      {
+        "type": "assertion",
+        "description": "Cart reflects updated quantity and total price recalculates accordingly."
+      },
+      {
+        "type": "action",
+        "description": "Remove an item from the cart."
+      },
+      {
+        "type": "assertion",
+        "description": "Item is removed and cart updates to reflect removal."
+      },
+      {
+        "type": "action",
+        "description": "Reload the page or navigate away and back."
+      },
+      {
+        "type": "assertion",
+        "description": "Cart state persists and reflects the last modifications."
+      }
+    ]
+  },
+  {
+    "id": "TC014",
+    "title": "Order Checkout and Creation",
+    "description": "Verify users can proceed through checkout, select payment, and successfully create an order.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as a user with items in the cart."
+      },
+      {
+        "type": "action",
+        "description": "Navigate to checkout page."
+      },
+      {
+        "type": "action",
+        "description": "Enter delivery details and select payment method (Chapa)."
+      },
+      {
+        "type": "action",
+        "description": "Submit the order."
+      },
+      {
+        "type": "assertion",
+        "description": "Order is created, payment process initiates and system redirects for payment."
+      }
+    ]
+  },
+  {
+    "id": "TC015",
+    "title": "Order Payment via Chapa Success Callback",
+    "description": "Verify system correctly processes successful payment callbacks from Chapa and updates order status.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Simulate successful payment callback from Chapa gateway with valid data."
+      },
+      {
+        "type": "assertion",
+        "description": "Order status updates to paid and user receives confirmation."
+      }
+    ]
+  },
+  {
+    "id": "TC016",
+    "title": "Order Payment Failure Handling",
+    "description": "Verify system correctly handles payment failures and notifies users appropriately.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Simulate payment failure callback or cancellation from Chapa gateway."
+      },
+      {
+        "type": "assertion",
+        "description": "Order remains unpaid and system notifies user of failed payment."
+      }
+    ]
+  },
+  {
+    "id": "TC017",
+    "title": "User Order History Display",
+    "description": "Verify users can view their past orders and the details are accurate and complete.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as a user with existing orders."
+      },
+      {
+        "type": "action",
+        "description": "Navigate to order history page."
+      },
+      {
+        "type": "assertion",
+        "description": "All past orders are listed with correct status, date, restaurant details, and items."
+      }
+    ]
+  },
+  {
+    "id": "TC018",
+    "title": "Admin Login and Dashboard Access",
+    "description": "Verify admins can successfully log in and access the admin dashboard functionality.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to admin login page."
+      },
+      {
+        "type": "action",
+        "description": "Enter valid admin credentials."
+      },
+      {
+        "type": "action",
+        "description": "Submit login."
+      },
+      {
+        "type": "assertion",
+        "description": "Admin is authenticated and redirected to dashboard with management options."
+      }
+    ]
+  },
+  {
+    "id": "TC019",
+    "title": "Admin Management of Users, Restaurants and Orders",
+    "description": "Verify admins can view, edit, and delete users, restaurants, and orders from the admin dashboard.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as admin."
+      },
+      {
+        "type": "action",
+        "description": "Navigate to user management page and perform view, edit, delete on user records."
+      },
+      {
+        "type": "assertion",
+        "description": "User data updates and deletions are reflected correctly."
+      },
+      {
+        "type": "action",
+        "description": "Navigate to restaurant management page and manage restaurant data similarly."
+      },
+      {
+        "type": "assertion",
+        "description": "Restaurant data updates and deletions are reflected correctly."
+      },
+      {
+        "type": "action",
+        "description": "Navigate to order management page and update order statuses."
+      },
+      {
+        "type": "assertion",
+        "description": "Order status updates are saved and reflected in user views."
+      }
+    ]
+  },
+  {
+    "id": "TC020",
+    "title": "Restaurant Owner Analytics and Review Management",
+    "description": "Verify restaurant owners can view analytics and manage customer reviews.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as a restaurant owner."
+      },
+      {
+        "type": "action",
+        "description": "Navigate to restaurant analytics page."
+      },
+      {
+        "type": "assertion",
+        "description": "Displays analytics data such as sales, orders, and popular menu items."
+      },
+      {
+        "type": "action",
+        "description": "Navigate to reviews management page."
+      },
+      {
+        "type": "action",
+        "description": "Edit or reply to customer reviews."
+      },
+      {
+        "type": "assertion",
+        "description": "Review changes are saved and visible."
+      }
+    ]
+  },
+  {
+    "id": "TC021",
+    "title": "Promo Code Validation and Discount Application",
+    "description": "Verify the promo code system applies valid discounts during checkout and rejects invalid or expired codes.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "At checkout, enter a valid promo code."
+      },
+      {
+        "type": "assertion",
+        "description": "Discount is applied accurately to order total."
+      },
+      {
+        "type": "action",
+        "description": "Enter an expired or invalid promo code."
+      },
+      {
+        "type": "assertion",
+        "description": "System rejects the promo code and displays an error message."
+      },
+      {
+        "type": "action",
+        "description": "Use a promo code exceeding usage limits."
+      },
+      {
+        "type": "assertion",
+        "description": "System rejects promo code with usage limit reached notification."
+      }
+    ]
+  },
+  {
+    "id": "TC022",
+    "title": "Rate Limiting on Authentication Endpoints",
+    "description": "Ensure rate limiting is enforced correctly to prevent brute force and DDoS attacks on login and registration endpoints.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Send repeated rapid requests to login endpoint exceeding threshold."
+      },
+      {
+        "type": "assertion",
+        "description": "System blocks requests after threshold and returns rate limit error."
+      },
+      {
+        "type": "action",
+        "description": "Send repeated rapid requests to registration endpoint exceeding threshold."
+      },
+      {
+        "type": "assertion",
+        "description": "System blocks requests after threshold and returns rate limit error."
+      }
+    ]
+  },
+  {
+    "id": "TC023",
+    "title": "Input Validation and Sanitization on User-Provided Data",
+    "description": "Verify all user inputs including registration, restaurant creation, menu items, and feedback are properly validated and sanitized to prevent injection attacks.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Submit registration form with special characters and script tags in input fields."
+      },
+      {
+        "type": "assertion",
+        "description": "Inputs are sanitized and dangerous data is rejected or escaped."
+      },
+      {
+        "type": "action",
+        "description": "Create restaurant or menu item with malicious input strings."
+      },
+      {
+        "type": "assertion",
+        "description": "System validates and sanitizes inputs preventing injection attacks."
+      },
+      {
+        "type": "action",
+        "description": "Submit reviews or feedback containing harmful scripts."
+      },
+      {
+        "type": "assertion",
+        "description": "Feedback is sanitized before storage and rendering."
+      }
+    ]
+  },
+  {
+    "id": "TC024",
+    "title": "Application UI Responsive Rendering",
+    "description": "Verify that key UI components render correctly across multiple devices and screen sizes without layout or functionality errors.",
+    "category": "ui",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Open the application home page on desktop, tablet, and mobile devices."
+      },
+      {
+        "type": "assertion",
+        "description": "UI components including navigation bars, restaurant cards, menus, and forms render properly and are usable."
+      },
+      {
+        "type": "action",
+        "description": "Navigate through key workflows like login, browsing, cart, and checkout on multiple screen sizes."
+      },
+      {
+        "type": "assertion",
+        "description": "All pages are functional and visually consistent."
+      }
+    ]
+  },
+  {
+    "id": "TC025",
+    "title": "Secure Password Storage Verification",
+    "description": "Verify that user passwords are stored encrypted using bcrypt and not stored or transmitted in plaintext.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Register a new user with password."
+      },
+      {
+        "type": "action",
+        "description": "Retrieve stored user record from database."
+      },
+      {
+        "type": "assertion",
+        "description": "Stored password is hashed using bcrypt and cannot be reversed to plaintext."
+      }
+    ]
+  },
+  {
+    "id": "TC026",
+    "title": "Order Tracking Status Updates",
+    "description": "Verify that users and restaurant owners can see real-time order status updates.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Place an order as a user."
+      },
+      {
+        "type": "action",
+        "description": "Update order status as restaurant owner (e.g., preparing, ready, delivered)."
+      },
+      {
+        "type": "assertion",
+        "description": "User’s order page updates to reflect new status accurately."
+      }
+    ]
+  },
+  {
+    "id": "TC027",
+    "title": "Access Control: Restaurant Owners Cannot Manage Others' Restaurants",
+    "description": "Verify that a restaurant owner cannot view or manage restaurants they do not own.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as a restaurant owner."
+      },
+      {
+        "type": "action",
+        "description": "Attempt to access the dashboard or management API for a restaurant owned by another user."
+      },
+      {
+        "type": "assertion",
+        "description": "Access is denied with appropriate authorization error."
+      }
+    ]
+  },
+  {
+    "id": "TC028",
+    "title": "Access Control: Admin Privileges Verification",
+    "description": "Verify that only admin users can access admin dashboard and management endpoints.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as a normal user or restaurant owner."
+      },
+      {
+        "type": "action",
+        "description": "Attempt to access admin dashboard URL or APIs."
+      },
+      {
+        "type": "assertion",
+        "description": "Access is denied with unauthorized access error."
+      },
+      {
+        "type": "action",
+        "description": "Login as admin user and access admin endpoints."
+      },
+      {
+        "type": "assertion",
+        "description": "Access granted and full admin functionalities available."
+      }
+    ]
+  },
+  {
+    "id": "TC029",
+    "title": "Home Page Promotional and Category Sections Rendering",
+    "description": "Verify that home page displays promotional content, restaurant categories, popular listings and special offers correctly.",
+    "category": "ui",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to home page."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that hero section, promotional offers, special deal sections, restaurant categories, and popular restaurants render and display data accurately."
+      }
+    ]
+  },
+  {
+    "id": "TC030",
+    "title": "Promo Code Usage Limit Enforcement",
+    "description": "Verify that promo codes with limited usage counts are enforced correctly, preventing usage beyond the defined limit.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Apply promo code at checkout until usage limit is reached."
+      },
+      {
+        "type": "assertion",
+        "description": "Promo code applies discount to orders until usage limit hits."
+      },
+      {
+        "type": "action",
+        "description": "Attempt to use promo code after usage limit reached."
+      },
+      {
+        "type": "assertion",
+        "description": "System rejects promo code with usage limit reached message."
+      }
+    ]
+  }
+]

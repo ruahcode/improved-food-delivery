@@ -1,0 +1,8 @@
+<svg width="400" height="300" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="400" height="300" fill="#F3F4F6"/>
+<path d="M200 120C211.046 120 220 111.046 220 100C220 88.9543 211.046 80 200 80C188.954 80 180 88.9543 180 100C180 111.046 188.954 120 200 120Z" fill="#9CA3AF"/>
+<path d="M160 140H240V180H160V140Z" fill="#9CA3AF"/>
+<path d="M170 150H190V170H170V150Z" fill="#D1D5DB"/>
+<path d="M210 150H230V170H210V150Z" fill="#D1D5DB"/>
+<text x="200" y="220" text-anchor="middle" fill="#6B7280" font-family="Arial, sans-serif" font-size="14">Restaurant Image</text>
+</svg>

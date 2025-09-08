@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Define font families */
+:root {
+  /* Font families */
+  --font-heading: 'Poppins', 'Montserrat', sans-serif;
+  --font-body: 'Inter', 'Roboto', sans-serif;
+  --font-dashboard: 'Inter', 'Source Sans Pro', sans-serif;
+  --font-auth: 'Roboto', 'Inter', sans-serif;
+}
+
+/* Base styles */
+@layer base {
+  html {
+    font-family: var(--font-body);
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 600;
+  }
+}
+
+/* Utility classes */
+.font-heading {
+  font-family: var(--font-heading);
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+/* Section-specific styles */
+.landing-section {
+  font-family: var(--font-body);
+}
+
+.landing-section h1,
+.landing-section h2,
+.landing-section h3,
+.landing-section h4,
+.landing-section h5,
+.landing-section h6 {
+  font-family: var(--font-heading);
+}
+
+.dashboard {
+  font-family: var(--font-dashboard);
+}
+
+.auth-page {
+  font-family: var(--font-auth);
+}
+
+/* Form elements */
+input,
+textarea,
+select,
+button,
+.btn {
+  font-family: var(--font-body);
+}
+
+/* Buttons */
+.btn {
+  font-weight: 500;
+}

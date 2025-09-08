@@ -1,0 +1,237 @@
+{
+  "meta": {
+    "project": "Food Delivery Application",
+    "date": "2025-08-17",
+    "prepared_by": "Software Development Manager"
+  },
+  "product_overview": "A full-stack food delivery application enabling users to browse restaurants, manage menus, place orders, and make payments, with robust features for restaurant owners and administrators alongside security best practices.",
+  "core_goals": [
+    "Provide a seamless and secure user authentication and authorization system.",
+    "Enable restaurant owners to manage their restaurant listings and menus effectively.",
+    "Offer customers comprehensive browsing, searching, and filtering of restaurants and menu items.",
+    "Allow users to add items to a shopping cart, manage quantities, and place orders.",
+    "Integrate a reliable payment gateway (Chapa) for secure transactions.",
+    "Provide an admin dashboard to manage users, restaurants, orders, and analytics efficiently.",
+    "Ensure security best practices including JWT authentication, input validation, rate limiting, and secure password handling."
+  ],
+  "key_features": [
+    "Complete user authentication with registration, login, and JWT token-based authorization.",
+    "Restaurant management including listing, details, and owner dashboards.",
+    "Menu management supporting full CRUD operations for menu items.",
+    "Shopping cart functionality with add, remove, and quantity update capabilities.",
+    "Order processing system covering checkout to order history and tracking.",
+    "Integration of Chapa payment gateway for online payments.",
+    "Admin dashboard facilitating management of users, restaurants, orders, support, and analytics.",
+    "Restaurant analytics and reporting with review management.",
+    "Advanced search and filtering mechanisms for better user experience.",
+    "Comprehensive security measures including rate limiting, input sanitization, and secure HTTP headers.",
+    "Home page composed of promotional sections, restaurant categories, and popular listings.",
+    "Promo code system offering discounts and special offers."
+  ],
+  "user_flow_summary": [
+    "User registers or logs in, receiving JWT tokens for authenticated access.",
+    "User browses restaurants using search and filters, viewing detailed restaurant and menu pages.",
+    "Restaurant owners login to access their restaurant dashboard, manage restaurant info, menus, and view analytics.",
+    "Users add menu items to their cart, modify quantities, and proceed to checkout.",
+    "During checkout, users select payment methods integrating with the Chapa payment gateway.",
+    "Orders are processed and users can track order status and review history.",
+    "Admin logs in to manage users, restaurants, orders, analytics, and handle support tickets through the admin dashboard."
+  ],
+  "validation_criteria": [
+    "Successful user registration and login with secure token handling and password encryption.",
+    "Proper CRUD operations on restaurants and menus with validation and authorization.",
+    "Shopping cart correctly adds, updates, and removes items with state persistence.",
+    "Orders correctly created, updated, and displayed to users and restaurants.",
+    "Payment transactions processed securely through Chapa with callbacks handled.",
+    "Admin panel reflects real-time data and allows management actions as intended.",
+    "Search and filtering yield appropriate results for restaurants and menu items.",
+    "Security features like rate limiting, input validation, and authentication prevent unauthorized access and attacks.",
+    "Promo codes correctly apply discounts and validate usage.",
+    "Application UI components correctly render across devices and workflows without errors."
+  ],
+  "code_summary": {
+    "tech_stack": [
+      "JavaScript",
+      "React",
+      "Node.js",
+      "Express.js",
+      "MongoDB",
+      "Mongoose",
+      "Vite",
+      "TailwindCSS",
+      "Material-UI",
+      "React Router",
+      "Axios",
+      "JWT",
+      "bcrypt",
+      "Chapa Payment"
+    ],
+    "features": [
+      {
+        "name": "User Authentication",
+        "description": "Complete user authentication system with login, register, and token-based authorization",
+        "files": [
+          "client/src/context/AuthContext.jsx",
+          "client/src/pages/auth/AuthPage.jsx",
+          "client/src/pages/auth/Login.jsx",
+          "client/src/pages/auth/Register.jsx",
+          "server/routes/UserRoutes.js",
+          "server/models/User.js",
+          "server/middleware/auth.js",
+          "server/middleware/authMiddleware.js"
+        ]
+      },
+      {
+        "name": "Restaurant Management",
+        "description": "Restaurant listing, details, and management system for restaurant owners",
+        "files": [
+          "client/src/pages/RestaurantListing.jsx",
+          "client/src/pages/NewRestaurantListing.jsx",
+          "client/src/components/RestaurantCard.jsx",
+          "client/src/pages/restaurant/RestaurantDashboard.jsx",
+          "client/src/pages/restaurant/RestaurantHome.jsx",
+          "server/routes/RestaurantRoutes.js",
+          "server/models/Restaurant.js"
+        ]
+      },
+      {
+        "name": "Menu Management",
+        "description": "Menu item management system for restaurants with CRUD operations",
+        "files": [
+          "client/src/components/RestaurantMenu.jsx",
+          "client/src/pages/restaurant/Menu.jsx",
+          "client/src/pages/restaurant/MenuManagement.jsx",
+          "client/src/components/FoodItemCard.jsx",
+          "server/routes/MenuItemRoutes.js",
+          "server/models/MenuItem.js"
+        ]
+      },
+      {
+        "name": "Shopping Cart",
+        "description": "Shopping cart functionality with add, remove, and quantity management",
+        "files": [
+          "client/src/pages/Cart.jsx",
+          "client/src/context/CartContext.jsx",
+          "client/src/hooks/useCart.js",
+          "server/routes/CartRoutes.js",
+          "server/models/Cart.js"
+        ]
+      },
+      {
+        "name": "Order Management",
+        "description": "Complete order processing system from checkout to delivery",
+        "files": [
+          "client/src/components/Checkout.jsx",
+          "client/src/pages/Checkout.jsx",
+          "client/src/pages/Orders.jsx",
+          "client/src/pages/OrderHistory.jsx",
+          "client/src/components/OrderCard.jsx",
+          "client/src/pages/restaurant/Orders.jsx",
+          "server/routes/OrderRoutes.js",
+          "server/models/Order.js"
+        ]
+      },
+      {
+        "name": "Payment Integration",
+        "description": "Chapa payment gateway integration for secure online payments",
+        "files": [
+          "client/src/pages/ChapaPayment.jsx",
+          "client/src/pages/PaymentCallback.jsx",
+          "server/routes/Payment.js"
+        ]
+      },
+      {
+        "name": "Admin Dashboard",
+        "description": "Comprehensive admin panel for managing users, restaurants, orders, and analytics",
+        "files": [
+          "client/src/pages/admin/AdminDashboard.jsx",
+          "client/src/pages/admin/Analytics.jsx",
+          "client/src/pages/admin/OrderManagement.jsx",
+          "client/src/pages/admin/RestaurantManagement.jsx",
+          "client/src/pages/admin/SupportManagement.jsx",
+          "client/src/pages/admin/UserManagement.jsx",
+          "client/src/pages/admin/CountryDashboard.jsx"
+        ]
+      },
+      {
+        "name": "Restaurant Analytics",
+        "description": "Analytics and reporting system for restaurant owners",
+        "files": [
+          "client/src/pages/restaurant/RestaurantAnalytics.jsx",
+          "client/src/pages/restaurant/Reviews.jsx",
+          "client/src/components/ReviewCard.jsx"
+        ]
+      },
+      {
+        "name": "Search and Filtering",
+        "description": "Advanced search and filtering system for restaurants and menu items",
+        "files": [
+          "client/src/components/SearchAndFilters.jsx"
+        ]
+      },
+      {
+        "name": "Navigation and UI",
+        "description": "Main navigation components and UI elements",
+        "files": [
+          "client/src/components/MainNavbar.jsx",
+          "client/src/components/Navbar.jsx",
+          "client/src/components/Footer.jsx",
+          "client/src/components/ProtectedRoute.jsx"
+        ]
+      },
+      {
+        "name": "Home Page Components",
+        "description": "Home page sections including hero, categories, and promotional content",
+        "files": [
+          "client/src/pages/Home.jsx",
+          "client/src/components/home/HeroSection.jsx",
+          "client/src/components/home/HowItWorks.jsx",
+          "client/src/components/home/PopularRestaurants.jsx",
+          "client/src/components/home/PromotionalOffers.jsx",
+          "client/src/components/home/RestaurantCategories.jsx",
+          "client/src/components/home/SpecialOffers.jsx"
+        ]
+      },
+      {
+        "name": "Promo Code System",
+        "description": "Promotional code system for discounts and offers",
+        "files": [
+          "server/routes/PromoCodeRoutes.js",
+          "server/models/PromoCode.js"
+        ]
+      },
+      {
+        "name": "Rate Limiting and Security",
+        "description": "Security middleware including rate limiting and authentication",
+        "files": [
+          "server/middleware/rateLimit.js",
+          "server/middleware/rateLimiter.js"
+        ]
+      },
+      {
+        "name": "Database Models",
+        "description": "MongoDB models for data persistence",
+        "files": [
+          "server/models/User.js",
+          "server/models/Restaurant.js",
+          "server/models/MenuItem.js",
+          "server/models/Cart.js",
+          "server/models/Order.js",
+          "server/models/PromoCode.js",
+          "server/models/Session.js"
+        ]
+      },
+      {
+        "name": "Additional Pages",
+        "description": "Supporting pages for user experience",
+        "files": [
+          "client/src/pages/AboutUs.jsx",
+          "client/src/pages/ContactUs.jsx",
+          "client/src/pages/Favorites.jsx",
+          "client/src/pages/UserProfile.jsx",
+          "client/src/pages/Support.jsx"
+        ]
+      }
+    ]
+  }
+}

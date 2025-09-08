@@ -1,0 +1,166 @@
+{
+  "tech_stack": [
+    "JavaScript",
+    "React",
+    "Node.js",
+    "Express",
+    "MongoDB",
+    "Vite",
+    "JWT",
+    "Chapa Payment API"
+  ],
+  "features": [
+    {
+      "name": "User Authentication",
+      "description": "Complete user registration, login, and JWT-based authentication system",
+      "files": [
+        "client/src/context/AuthContext.jsx",
+        "client/src/pages/auth/Login.jsx",
+        "client/src/pages/auth/Register.jsx",
+        "client/src/pages/auth/AuthPage.jsx",
+        "server/models/User.js",
+        "server/routes/UserRoutes.js",
+        "server/middleware/auth.js"
+      ]
+    },
+    {
+      "name": "Restaurant Management",
+      "description": "Restaurant creation, listing, and management for restaurant owners",
+      "files": [
+        "client/src/pages/NewRestaurantListing.jsx",
+        "client/src/pages/RestaurantListing.jsx",
+        "client/src/components/RestaurantCard.jsx",
+        "server/models/Restaurant.js",
+        "server/routes/RestaurantRoutes.js",
+        "server/controllers/RestaurantController.js"
+      ]
+    },
+    {
+      "name": "Menu Management",
+      "description": "Menu item CRUD operations and restaurant menu display",
+      "files": [
+        "client/src/pages/restaurant/MenuManagement.jsx",
+        "client/src/pages/RestaurantMenu.jsx",
+        "client/src/components/FoodItemCard.jsx",
+        "server/models/MenuItem.js",
+        "server/routes/MenuItemRoutes.js"
+      ]
+    },
+    {
+      "name": "Shopping Cart",
+      "description": "Add/remove items, update quantities, and cart management",
+      "files": [
+        "client/src/pages/Cart.jsx",
+        "client/src/context/CartContext.jsx",
+        "client/src/hooks/useCart.js",
+        "server/models/Cart.js",
+        "server/routes/CartRoutes.js"
+      ]
+    },
+    {
+      "name": "Order Management",
+      "description": "Order placement, tracking, and history for users and restaurants",
+      "files": [
+        "client/src/pages/Checkout.jsx",
+        "client/src/pages/Orders.jsx",
+        "client/src/pages/OrderHistory.jsx",
+        "client/src/pages/restaurant/Orders.jsx",
+        "client/src/components/OrderCard.jsx",
+        "server/models/Order.js",
+        "server/routes/OrderRoutes.js"
+      ]
+    },
+    {
+      "name": "Payment Integration",
+      "description": "Chapa payment gateway integration for order checkout",
+      "files": [
+        "client/src/pages/ChapaPayment.jsx",
+        "client/src/pages/PaymentCallback.jsx",
+        "server/routes/Payment.js"
+      ]
+    },
+    {
+      "name": "Admin Dashboard",
+      "description": "Comprehensive admin panel for user, restaurant, and order management",
+      "files": [
+        "client/src/pages/admin/AdminDashboard.jsx",
+        "client/src/pages/admin/UserManagement.jsx",
+        "client/src/pages/admin/RestaurantManagement.jsx",
+        "client/src/pages/admin/OrderManagement.jsx",
+        "client/src/pages/admin/Analytics.jsx",
+        "client/src/pages/admin/SupportManagement.jsx"
+      ]
+    },
+    {
+      "name": "Restaurant Dashboard",
+      "description": "Restaurant owner dashboard with analytics and management tools",
+      "files": [
+        "client/src/pages/restaurant/RestaurantDashboard.jsx",
+        "client/src/pages/restaurant/RestaurantAnalytics.jsx",
+        "client/src/pages/restaurant/RestaurantHome.jsx"
+      ]
+    },
+    {
+      "name": "Search and Filtering",
+      "description": "Restaurant search, category filtering, and rating-based sorting",
+      "files": [
+        "client/src/components/SearchAndFilters.jsx",
+        "client/src/pages/Home.jsx"
+      ]
+    },
+    {
+      "name": "Promo Code System",
+      "description": "Promotional code application and validation during checkout",
+      "files": [
+        "server/models/PromoCode.js",
+        "server/routes/PromoCodeRoutes.js"
+      ]
+    },
+    {
+      "name": "Rate Limiting",
+      "description": "API rate limiting and security middleware",
+      "files": [
+        "server/middleware/rateLimit.js",
+        "server/middleware/rateLimiter.js"
+      ]
+    },
+    {
+      "name": "Home Page Components",
+      "description": "Landing page with hero section, categories, and promotional offers",
+      "files": [
+        "client/src/components/home/HeroSection.jsx",
+        "client/src/components/home/RestaurantCategories.jsx",
+        "client/src/components/home/PopularRestaurants.jsx",
+        "client/src/components/home/SpecialOffers.jsx",
+        "client/src/components/home/HowItWorks.jsx",
+        "client/src/components/home/PromotionalOffers.jsx"
+      ]
+    },
+    {
+      "name": "Navigation and Layout",
+      "description": "Main navigation, protected routes, and responsive layout components",
+      "files": [
+        "client/src/components/MainNavbar.jsx",
+        "client/src/components/Navbar.jsx",
+        "client/src/components/Footer.jsx",
+        "client/src/components/common/ProtectedRoute.jsx"
+      ]
+    },
+    {
+      "name": "User Profile and Favorites",
+      "description": "User profile management and favorite restaurants/items",
+      "files": [
+        "client/src/pages/UserProfile.jsx",
+        "client/src/pages/Favorites.jsx"
+      ]
+    },
+    {
+      "name": "Reviews and Ratings",
+      "description": "Restaurant and food item review system",
+      "files": [
+        "client/src/components/ReviewCard.jsx",
+        "client/src/pages/restaurant/Reviews.jsx"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontend Connection Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        .success { background-color: #d4edda; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; border: 1px solid #f5c6cb; }
+        .loading { background-color: #fff3cd; border: 1px solid #ffeaa7; }
+    </style>
+</head>
+<body>
+    <h1>Frontend Connection Test</h1>
+    <div id="results"></div>
+
+    <script>
+        const results = document.getElementById('results');
+        
+        function addResult(test, status, message) {
+            const div = document.createElement('div');
+            div.className = `test ${status}`;
+            div.innerHTML = `<strong>${test}:</strong> ${message}`;
+            results.appendChild(div);
+        }
+
+        async function runTests() {
+            // Test 1: Frontend server
+            addResult('Frontend Server', 'loading', 'Testing...');
+            try {
+                const response = await fetch('http://localhost:5173/');
+                if (response.ok) {
+                    addResult('Frontend Server', 'success', 'Connected successfully');
+                } else {
+                    addResult('Frontend Server', 'error', `HTTP ${response.status}`);
+                }
+            } catch (error) {
+                addResult('Frontend Server', 'error', error.message);
+            }
+
+            // Test 2: Backend via proxy
+            addResult('Backend (via proxy)', 'loading', 'Testing...');
+            try {
+                const response = await fetch('/api/health');
+                const data = await response.json();
+                addResult('Backend (via proxy)', 'success', `Connected: ${data.status}`);
+            } catch (error) {
+                addResult('Backend (via proxy)', 'error', error.message);
+            }
+
+            // Test 3: Backend direct
+            addResult('Backend (direct)', 'loading', 'Testing...');
+            try {
+                const response = await fetch('http://localhost:5000/api/health');
+                const data = await response.json();
+                addResult('Backend (direct)', 'success', `Connected: ${data.status}`);
+            } catch (error) {
+                addResult('Backend (direct)', 'error', error.message);
+            }
+
+            // Test 4: WebSocket (simulate)
+            addResult('WebSocket Test', 'loading', 'Testing...');
+            try {
+                const ws = new WebSocket('ws://localhost:5173/');
+                ws.onopen = () => {
+                    addResult('WebSocket Test', 'success', 'WebSocket connection opened');
+                    ws.close();
+                };
+                ws.onerror = (error) => {
+                    addResult('WebSocket Test', 'error', 'WebSocket connection failed');
+                };
+                ws.onclose = () => {
+                    console.log('WebSocket closed');
+                };
+            } catch (error) {
+                addResult('WebSocket Test', 'error', error.message);
+            }
+        }
+
+        runTests();
+    </script>
+</body>
+</html>
